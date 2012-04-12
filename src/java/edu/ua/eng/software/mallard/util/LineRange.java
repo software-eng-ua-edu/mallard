@@ -5,7 +5,7 @@
  *
  * See LICENSE for details.
  */
-package edu.ua.cs.mallard.util;
+package edu.ua.eng.software.mallard.util;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;

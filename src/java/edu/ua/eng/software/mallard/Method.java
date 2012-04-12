@@ -5,7 +5,7 @@
  *
  * See LICENSE for details.
  */
-package edu.ua.cs.mallard;
+package edu.ua.eng.software.mallard;
 
 import edu.ua.cs.mallard.util.LineRange;
 
