@@ -114,7 +114,7 @@ See LICENSE for details.
       <antlr3
          grammar.name      = "${grammar.java.name}"
          grammar.location  = "${dir.src.antlr3}"
-         parser.location   = "${dir.src.java}/edu/ua/cs/mallard"
+         parser.location   = "${dir.src.java}/edu/ua/eng/software/mallard"
          />
    </target>
 
@@ -170,13 +170,13 @@ See LICENSE for details.
       description = "Delete ANTLR v3 generated files"
       >
       <delete
-         file  = "${dir.src.java}/edu/ua/cs/elephant/${grammar.java.name}.tokens"
+         file  = "${dir.src.java}/edu/ua/eng/software/mallard/${grammar.java.name}.tokens"
          />
       <delete
-         file  = "${dir.src.java}/edu/ua/cs/elephant/${grammar.java.name}Lexer.java"
+         file  = "${dir.src.java}/edu/ua/eng/software/mallard/${grammar.java.name}Lexer.java"
          />
       <delete
-         file  = "${dir.src.java}/edu/ua/cs/elephant/${grammar.java.name}Parser.java"
+         file  = "${dir.src.java}/edu/ua/eng/software/mallard/${grammar.java.name}Parser.java"
          />
    </target>
 

@@ -54,7 +54,7 @@ public class MethodParser implements Runnable
         try {
             lexer = new Java5Lexer(new ANTLRInputStream((this.zip.getInputStream(this.zip.getEntry(filename))), "iso-8859-1"));
             parser = new JavaParser(new CommonTokenStream(lexer));
-            List<Method> methods = parser.compilationUnit();
+            List<Method> methods = parser.compilationUnit(filename);
             for (Method method : methods) {
                 this.methods.putIfAbsent(method.getQualifiedName(), method);
             }

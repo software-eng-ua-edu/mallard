@@ -7,7 +7,7 @@
  */
 package edu.ua.eng.software.mallard;
 
-import edu.ua.cs.mallard.util.LineRange;
+import edu.ua.eng.software.mallard.util.LineRange;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class Method
 {
-    public Method() {
+    public Method(String filename) {
+        this.filename = filename;
         this.range = new LineRange();
     }
 
@@ -44,6 +45,7 @@ public class Method
         this.callees.add(callee);
     }
 
+    public String getFilename() { return filename; }
     public LineRange getLineRange() { return range; }
     public String getName() { return name; }
     public String getQualifiedName() { return qualifiedName; }
@@ -54,6 +56,7 @@ public class Method
         return qualifiedName; // + ":(" + range.getStartLine() + "," + range.getEndLine() + ")";
     }
 
+    private String filename;
     private LineRange range;
     private String name;
     private String qualifiedName;

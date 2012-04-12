@@ -175,15 +175,15 @@ options {backtrack=true; memoize=true;}
 
 @lexer::header {
     // Code in this section is added to the top of JavaLexer.java.
-    package edu.ua.cs.mallard;
+    package edu.ua.eng.software.mallard;
 }
 
 @header {
     // Code in this section is added to the top of JavaParser.java.
-    package edu.ua.cs.mallard;
+    package edu.ua.eng.software.mallard;
 
-    import edu.ua.cs.mallard.Method;
-    import edu.ua.cs.mallard.util.LineRange;
+    import edu.ua.eng.software.mallard.Method;
+    import edu.ua.eng.software.mallard.util.LineRange;
 
     import org.apache.commons.lang3.StringUtils;
 
@@ -228,6 +228,7 @@ options {backtrack=true; memoize=true;}
         return fs;
     }
 
+    private String filename;
     private Deque<Integer> anonStack = new ArrayDeque<Integer>();
     private Deque<String> formals = new LinkedList<String>();
     private Deque<String> qualifiedNameStack = new ArrayDeque<String>();
@@ -238,7 +239,10 @@ options {backtrack=true; memoize=true;}
 // starting point for parsing a java file
 /* The annotations are separated out to make parsing faster, but must be associated with
    a packageDeclaration or a typeDeclaration (and not an empty one). */
-compilationUnit returns [List<Method> methods]
+compilationUnit[String filename] returns [List<Method> methods]
+@init {
+    this.filename = filename;
+}
 @after {
     $methods = this.methodList;
 }
@@ -415,7 +419,7 @@ memberDecl
             if (0 < $classBodyDeclaration.size()) {
                 $classBodyDeclaration::startLine = Math.min(v.getLine(), $classBodyDeclaration::startLine);
             }
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
             String text = $i.getText();
             m.setName(text);
@@ -433,7 +437,7 @@ memberDecl
             if (0 < $classBodyDeclaration.size()) {
                 $classBodyDeclaration::startLine = Math.min(i.getLine(), $classBodyDeclaration::startLine);
             }
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
             String text = $i.getText();
             m.setName(text);
@@ -458,7 +462,7 @@ memberDecl
     
 memberDeclaration
     :   {
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
         }
         type methodDeclaration
@@ -467,7 +471,7 @@ memberDeclaration
 
 genericMethodOrConstructorDecl
     :   {
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
         }
         typeParameters genericMethodOrConstructorRest
@@ -538,7 +542,7 @@ interfaceMemberDecl
     :   interfaceMethodOrFieldDecl
     |   interfaceGenericMethodDecl
     |   {
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
         }
         v='void' i=Identifier
@@ -571,7 +575,7 @@ interfaceMemberDecl
 interfaceMethodOrFieldDecl
     :   type Identifier constantDeclaratorsRest ';'
     |   {
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
         }
         type i=Identifier
@@ -646,7 +650,7 @@ interfaceMethodDeclaratorRest
     
 interfaceGenericMethodDecl
     :   {
-            Method m = new Method();
+            Method m = new Method(this.filename);
             this.methodStack.addFirst(m);
         }
         typeParameters (type | 'void') i=Identifier
