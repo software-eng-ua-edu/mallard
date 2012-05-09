@@ -43,6 +43,7 @@ public class Mallard
             Methods.extract(args[1])
         );
         computeMaxFanInFanOut(methods);
+        System.out.println(xml_output(methods));
 
         long elapsed = System.nanoTime() - start;
         System.out.println("Elapsed time in Mallard.main: " + (elapsed / 1000000000.0) + " seconds");
@@ -68,5 +69,27 @@ public class Mallard
         }
         System.out.println("Max Fan-In: " + maxFanIn + " --- " + maxFanInName);
         System.out.println("Max Fan-Out: " + maxFanOut + " --- " + maxFanOutName);
+    }
+    
+    private static String xml_output(ConcurrentMap<String,Method> methods) {
+    	StringBuilder output = new StringBuilder();
+    	output.append("<methods>\n");
+    	for (String qname : methods.keySet()) {
+    		Method method = methods.get(qname);
+    		output.append("\t<method qname=\"" + qname + "\">\n");
+    		output.append("\t\t<callees>\n");
+    		for (String cname : method.getCallees()) {
+    			output.append("\t\t\t<callee qname=\"" + cname + "\"></callee>\n");
+    		}
+    		output.append("\t\t</callees>\n");
+    		output.append("\t\t<callers>\n");
+    		for (Method caller : method.getCallers()) {
+    			output.append("\t\t\t<caller qname=\"" + caller.getQualifiedName() + "\"></caller>\n");
+    		}
+    		output.append("\t\t</callers>\n");
+    		output.append("\t</method>\n");
+    	}
+    	output.append("</methods>\n");
+    	return output.toString();
     }
 }
