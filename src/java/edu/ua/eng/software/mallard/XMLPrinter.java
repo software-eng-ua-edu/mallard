@@ -92,7 +92,7 @@ public class XMLPrinter
 	}
 	
 	private void addAttr(String key, int value) {
-		output.append(" " + key + "=" + value);
+		addAttr(key, String.valueOf(value));
 	}
 	
 	private int indentLevel = 0;
