@@ -7,7 +7,10 @@
  */
 package edu.ua.eng.software.mallard;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.concurrent.ConcurrentMap;
+
 import edu.ua.eng.software.mallard.util.LineRange;
 
 /**
@@ -16,12 +19,11 @@ import edu.ua.eng.software.mallard.util.LineRange;
  */
 public class XMLPrinter
 {
-	public static String getXML(ConcurrentMap<String,Method> methods) {
-		XMLPrinter xp = new XMLPrinter(methods);
-		return xp.getXML();
+	public XMLPrinter(Writer writer) {
+		this.output = writer;
 	}
 	
-	private XMLPrinter(ConcurrentMap<String,Method> methods) {
+	public void writeXML(ConcurrentMap<String,Method> methods) throws IOException { 
 		startTag("methods", CLOSED);
 		for (String qname : methods.keySet()) {
 			Method method = methods.get(qname);
@@ -48,32 +50,31 @@ public class XMLPrinter
 			endTag("method");
 		}
 		endTag("methods");
-	}
+		output.flush();
+	};
 	
-	public String getXML() { return output.toString(); };
-	
-	private void startTag(String tag, boolean closed) {
+	private void startTag(String tag, boolean closed) throws IOException {
 		indent();
-		output.append("<" + tag);
+		output.write("<" + tag);
 		if (closed) closeStartTag();
 		++indentLevel;
 	}
 	
-	private void closeStartTag() {
-		output.append(">\n");
+	private void closeStartTag() throws IOException {
+		output.write(">\n");
 	}
 	
-	private void endTag(String tag) {
+	private void endTag(String tag) throws IOException {
 		--indentLevel;
 		indent();
-		output.append("</" + tag + ">\n");
+		output.write("</" + tag + ">\n");
 	}
 	
-	private void indent() {
-		for(int i = 0; i < indentLevel; ++i) output.append(indent);
+	private void indent() throws IOException {
+		for(int i = 0; i < indentLevel; ++i) output.write(indent);
 	}
 	
-	private void methodAttr(Method method) {
+	private void methodAttr(Method method) throws IOException {
 		addAttr("qname", method.getQualifiedName());
 		addAttr("filename", method.getFilename());
 		
@@ -82,22 +83,22 @@ public class XMLPrinter
 		addAttr("endLine", range.getEndLine());
 	}
 	
-	private void callingAttr(Method method) {
+	private void callingAttr(Method method) throws IOException {
 		addAttr("ncallers", method.getCallers().size());
 		addAttr("ncallees", method.getCallees().size());
 	}
 	
-	private void addAttr(String key, String value) {
-		output.append(" " + key + "=\"" + value + "\"");
+	private void addAttr(String key, String value) throws IOException {
+		output.write(" " + key + "=\"" + value + "\"");
 	}
 	
-	private void addAttr(String key, int value) {
+	private void addAttr(String key, int value) throws IOException {
 		addAttr(key, String.valueOf(value));
 	}
-	
+
+	private Writer output;
 	private int indentLevel = 0;
 	private String indent = "\t";
-	private StringBuilder output = new StringBuilder();
 	private final boolean CLOSED = true;
 	private final boolean OPEN = false;
 }

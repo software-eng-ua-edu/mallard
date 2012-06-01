@@ -9,6 +9,8 @@ package edu.ua.eng.software.mallard;
 
 //import java.io.FileOutputStream;
 //import java.io.PrintStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -43,8 +45,10 @@ public class Mallard
             Methods.extract(args[1])
         );
         computeMaxFanInFanOut(methods);
-        System.out.println(XMLPrinter.getXML(methods));
-
+        
+        XMLPrinter xp = new XMLPrinter(new FileWriter("test.xml"));
+        xp.writeXML(methods);
+        
         long elapsed = System.nanoTime() - start;
         System.out.println("Elapsed time in Mallard.main: " + (elapsed / 1000000000.0) + " seconds");
     }
