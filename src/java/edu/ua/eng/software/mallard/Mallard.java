@@ -46,7 +46,7 @@ public class Mallard
         );
         computeMaxFanInFanOut(methods);
         
-        XMLPrinter xp = new XMLPrinter(new FileWriter("test.xml"));
+        XMLPrinter xp = new XMLPrinter(new FileWriter("out.xml"));
         xp.writeXML(methods);
         
         long elapsed = System.nanoTime() - start;
