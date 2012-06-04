@@ -163,6 +163,23 @@ See LICENSE for details.
          link        = "${dir.build.jar}/${project.name}.jar"
          overwrite   = "yes"
          />
+
+      <!-- Added -->
+      <jar
+         basedir  = "${dir.build.class}"
+         jarfile  = "${dir.build.jar}/flock-${project.version}.jar"
+         >
+         <manifest>
+            <attribute name="Main-Class" value="edu.ua.eng.software.flock.Flock" />
+         </manifest>
+         <zipfileset refid="commons-lang3.zfs" />
+      </jar>
+      <symlink
+         resource    = "flock-${project.version}.jar"
+         link        = "${dir.build.jar}/flock.jar"
+         overwrite   = "yes"
+         />
+
    </target>
 
    <target
@@ -208,6 +225,16 @@ See LICENSE for details.
       <symlink
          resource    = "${project.jar.name}.jar"
          link        = "${dir.dist.lib}/${project.name}.jar"
+         overwrite   = "yes"
+         />
+
+      <!-- Added -->
+      <copy
+         todir = "${dir.dist.lib}"
+         file  = "${dir.build.jar}/flock-${project.version}.jar" />
+      <symlink
+         resource    = "flock-${project.version}.jar"
+         link        = "${dir.dist.lib}/flock.jar"
          overwrite   = "yes"
          />
    </target>
