@@ -3,6 +3,8 @@ package edu.ua.eng.software.flock;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -31,16 +33,16 @@ public class Flock
 		NiCadHandler niCadHandler = new NiCadHandler(fileMap);
 		saxParser.parse(ccFile, niCadHandler);
 		
-		ArrayList<ArrayList<Method>> clones = niCadHandler.getClones();
+		ConcurrentMap<Method, Set<Method>> clones = CloneMap.getMap(niCadHandler.getClones());
 		System.out.println(clones.size());
 		
-		for(ArrayList<Method> clone : clones) {
-			System.out.println("Clone group:");
-			for(Method method : clone) {
-				System.out.print(method);
-				System.out.println(String.format(" called by %d", method.getCallers().size()));
+		for(Method m: clones.keySet()) {
+			System.out.println("Clones of " + m);
+			for(Method n: clones.get(m)) {
+				System.out.println(n);
 			}
 			System.out.println();
 		}
+		
 	}
 }
